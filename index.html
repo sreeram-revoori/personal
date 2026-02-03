@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Animated background with city skyline */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px),
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px);
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating hearts animation */
+        .heart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* City references */
+        .city-labels {
+            position: absolute;
+            top: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 50px;
+            color: white;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .city-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main question card */
+        .question-card {
+            background: white;
+            padding: 60px 80px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 42px;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .quote {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 30px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        /* Button container */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            height: 60px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        #noBtn {
+            background: #f0f0f0;
+            color: #666;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        #noBtn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Success screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .success-screen h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .success-screen p {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .celebration {
+            font-size: 80px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .love-message {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gif-container {
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .question-card {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+
+            .city-labels {
+                flex-direction: column;
+                gap: 10px;
+                top: 10px;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="heart-container" id="heartContainer"></div>
+
+    <div class="city-labels">
+        <div class="city-label">🗽 New York City</div>
+        <div class="city-label">🕌 New Delhi</div>
+    </div>
+
+    <div class="container">
+        <div class="question-card" id="questionCard">
+            <h1>Will You Be My Valentine? 💕</h1>
+            <p class="subtitle">Just like Dhruv and Kavya's little things...</p>
+            <p class="quote">
+                "It's the little things that matter - from NYC bagels to Delhi chaat,
+                from Brooklyn bridges to India Gate sunsets.
+                Every moment with you is a little thing I cherish."
+            </p>
+            <div class="button-container">
+                <button id="yesBtn">Yes! 💖</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div class="success-screen" id="successScreen">
+            <div class="celebration">🎉💕🎊</div>
+            <h1>Yayyy! 🥰</h1>
+            <p>You just made me the happiest person!</p>
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDN1dGQwYzN2M3N4ZHQ1MjBqbWF5Ym5oZHNvMm5rZGJ3Y2JxNWh1ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6Zt6ML6BklcajjsA/giphy.gif" alt="Celebration">
+            </div>
+            <div class="love-message">
+                <p style="font-size: 20px; color: #667eea; margin-bottom: 15px;">
+                    Our love story, just like "Little Things"
+                </p>
+                <p style="font-size: 16px; color: #666; line-height: 1.8;">
+                    From the busy streets of NYC to the vibrant lanes of Delhi,
+                    from coffee dates to late-night conversations,
+                    every little moment with you creates our perfect story. ❤️
+                </p>
+                <p style="font-size: 18px; color: #764ba2; margin-top: 20px; font-weight: bold;">
+                    Happy Valentine's Day, my love! 💕
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionCard = document.getElementById('questionCard');
+        const successScreen = document.getElementById('successScreen');
+        const heartContainer = document.getElementById('heartContainer');
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '💕';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heartContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        // Generate hearts periodically
+        setInterval(createHeart, 500);
+
+        // "No" button movement
+        let noBtnScale = 1;
+        noBtn.addEventListener('mouseenter', function() {
+            const maxX = window.innerWidth - noBtn.offsetWidth - 100;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 100;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Make "No" button smaller each time
+            noBtnScale -= 0.05;
+            if (noBtnScale < 0.3) noBtnScale = 0.3;
+            noBtn.style.transform = `scale(${noBtnScale})`;
+            
+            // Make "Yes" button bigger
+            const yesScale = 1 + (1 - noBtnScale) * 0.5;
+            yesBtn.style.transform = `scale(${yesScale})`;
+        });
+
+        // Mobile touch support for "No" button
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const maxX = window.innerWidth - noBtn.offsetWidth - 100;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 100;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            noBtnScale -= 0.05;
+            if (noBtnScale < 0.3) noBtnScale = 0.3;
+            noBtn.style.transform = `scale(${noBtnScale})`;
+            
+            const yesScale = 1 + (1 - noBtnScale) * 0.5;
+            yesBtn.style.transform = `scale(${yesScale})`;
+        });
+
+        // "Yes" button click
+        yesBtn.addEventListener('click', function() {
+            questionCard.style.display = 'none';
+            successScreen.style.display = 'block';
+            
+            // Create celebration hearts
+            for (let i = 0; i < 50; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        });
+    </script>
+</body>
+</html>
